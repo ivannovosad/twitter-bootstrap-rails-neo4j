@@ -9,7 +9,9 @@
       <%- columns.each do |column| -%>
       <th><%%= model_class.human_attribute_name(:<%= column.name %>) %></th>
       <%- end -%>
+      <%- unless defined?(Neo4j::Rails::Model) == "constant" -%>
       <th><%%= model_class.human_attribute_name(:created_at) %></th>
+      <%- end -%>
       <th><%%=t '.actions', :default => t("helpers.actions") %></th>
     </tr>
   </thead>
@@ -20,7 +22,9 @@
         <%- columns.each do |column| -%>
         <td><%%= <%= resource_name %>.<%= column.name %> %></td>
         <%- end -%>
+        <% unless defined?(Neo4j::Rails::Model) == "constant" %>
         <td><%%=l <%= resource_name %>.created_at %></td>
+        <% end %>
         <td>
           <%%= link_to t('.edit', :default => t("helpers.links.edit")),
                       edit_<%= singular_controller_routing_path %>_path(<%= resource_name %>), :class => 'btn btn-mini' %>

@@ -86,6 +86,13 @@ module Bootstrap
           rescue_block ActiveRecord::StatementInvalid do
             @model_name.constantize.columns
           end
+        elsif defined?(Neo4j::Rails::Model) == "constant"
+          rescue_block do
+            require 'ostruct'
+            @model_name.constantize._decl_props.map do |c|
+              OpenStruct.new name: c[0], type: c[1][:type]
+            end
+          end
         else
           rescue_block do
             @model_name.constantize.fields.map {|c| c[1] }
